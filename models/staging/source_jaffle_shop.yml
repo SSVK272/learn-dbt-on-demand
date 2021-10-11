@@ -1,0 +1,43 @@
+version: 2
+
+sources:
+    - name: js
+      description: A clone of snowflake database application.
+      database: raw
+      schema: jaffle_shop
+      tables:
+        - name: customers
+          description: Raw customers data
+          columns:
+            - name: id
+              description: Primary key of customers
+              tests:
+                - unique
+                - not_null
+        - name: orders
+          description: Raw orders data
+          loaded_at_field: _etl_loaded_at
+          freshness:
+            warn_after: {count: 280,period: hour}
+            error_after: {count: 300,period: hour}
+          columns:
+            - name: id
+              description: Primary key of orders
+              tests:
+                - unique
+                - not_null
+
+    - name: stripe
+      description: A clone of snowflake database application
+      database: raw
+      tables:
+        - name: payment
+          description: Raw payment data
+          loaded_at_field: _batched_at
+          freshness:
+            warn_after: {count: 280,period: hour}
+            error_after: {count: 300,period: hour}
+          columns:
+            - name: id
+              description: Primary key of payment
+
